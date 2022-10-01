@@ -44,6 +44,7 @@ class App:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.is_running = False
+                self.scene.on_event(event)
             keys = pygame.key.get_pressed()
             self.update(keys)
         pygame.quit()
