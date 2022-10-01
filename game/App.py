@@ -7,12 +7,14 @@ from game.scenes.Scene import Scene
 class App:
     def __init__(self, screen_width: int, screen_height: int, max_fps: int = 60, init_scene: Scene = None, bg_color: tuple = (39, 185, 245, 0.8)) -> None:
         pygame.init()
-        self.screen: pygame.Surface = pygame.display.set_mode([screen_width, screen_height], pygame.FULLSCREEN)
+        self.screen: pygame.Surface = pygame.display.set_mode([screen_width, screen_height])
         self.width: int = pygame.display.get_surface().get_size()[0]
         self.height: int = pygame.display.get_surface().get_size()[1]
         self.clock: pygame.time.Clock = pygame.time.Clock()
         self.is_running: bool = False
         self.scene = init_scene
+        if self.scene is not None:
+            self.scene.pre_loads()
         self.max_fps: int = max_fps
         self.bg_color: tuple = bg_color
         self.draw_options: pymunk.pygame_util.DrawOptions = pymunk.pygame_util.DrawOptions(self.screen)
@@ -21,7 +23,7 @@ class App:
     def update(self, keys: list) -> None:
         if self.scene is not None:
             self.screen.fill(self.scene.bg_color)
-            self.scene.update(keys)
+            self.scene.update(self.screen, keys)
             self.scene.space.debug_draw(self.draw_options)
             self.scene.space.step(1/self.max_fps)
 
