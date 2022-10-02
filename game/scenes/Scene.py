@@ -20,6 +20,7 @@ class Scene:
         self.current_joint = None
         self.is_grabbing = False
         self.can_grab = False
+        self.is_jumping = False
         self.grabbing_color = (0, 255, 0)
         self.not_grabbing_color = (255, 0, 0)
         self.mouse_x = None
@@ -35,6 +36,11 @@ class Scene:
         self.static_items.add(item)
 
     def update(self, screen: pygame.Surface, pressed_keys: list) -> None:
+        # check collition with static items to jump
+        if pygame.sprite.spritecollide(self.player, self.static_items, False):
+            self.is_jumping = False
+
+
         if not self.is_grabbing:
             self.mouse_x, self.mouse_y = pygame.mouse.get_pos()
         player_x, player_y = calculate_center(self.player.vertices, self.player.body.position.x, self.player.body.position.y)
@@ -52,13 +58,10 @@ class Scene:
             self.mouse_x = player_x + distance * np.cos(angle)
             self.mouse_y = player_y + distance * np.sin(angle)
 
-        # collition mouse point to other items
 
         if collition_query(self.space, (self.mouse_x, self.mouse_y)):
-            # print("collition")
             self.can_grab = True
         else:
-            # print("no collition")
             self.can_grab = False
 
         if self.is_grabbing:
@@ -87,3 +90,7 @@ class Scene:
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
                 self.is_grabbing = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                self.player.body.velocity = Vec2D(0, -500)
+                self.is_jumping = True

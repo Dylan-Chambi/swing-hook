@@ -6,13 +6,16 @@ from game.items.staticItems.Boundarie import Boundarie
 from game.scenes.Scene import Scene
 
 
+SCREEN_WIDTH = 1920
+SCREEN_HEIGHT = 1080
+
 if __name__ == "__main__":
-    player = Player([(0, 0), (50, 0), (0, 50), (50, 50)], 500, 500)
+    player = Player(500, 500, 50, 50)
     scene1 = Scene(player)
-    boundarie = Boundarie([(0, 0), (50, 0), (0, 1080), (50, 1080)], 0, 0)
-    boundarie2 = Boundarie([(0, 0), (50, 0), (0, 1080), (50, 1080)], 1870, 0)
-    boundarie3 = Boundarie([(0, 0), (1920, 0), (0, 50), (1920, 50)], 0, 0)
-    boundarie4 = Boundarie([(0, 0), (1920, 0), (0, 50), (1920, 50)], 0, 1030)
+    boundarie = Boundarie(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 10, SCREEN_WIDTH, 20)
+    boundarie2 = Boundarie(SCREEN_WIDTH / 2, 10, SCREEN_WIDTH, 20)
+    boundarie3 = Boundarie(10, SCREEN_HEIGHT / 2, 20, SCREEN_HEIGHT)
+    boundarie4 = Boundarie(SCREEN_WIDTH - 10, SCREEN_HEIGHT / 2, 20, SCREEN_HEIGHT)
 
     # boundarie.scale(1, 1)
     # boundarie.rotate(radians(90))
@@ -27,5 +30,5 @@ if __name__ == "__main__":
     # string1 = String(player, (0, 0))
 
 
-    app = App(0, 0, 60, scene1)
+    app = App(SCREEN_WIDTH, SCREEN_HEIGHT, 60, scene1)
     app.run()

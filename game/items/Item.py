@@ -7,17 +7,14 @@ import numpy as np
 from pygame.sprite import Sprite
 
 class Item(Sprite):
-    def __init__(self, vertices: list, x: int, y: int, vx: float, vy: float, scale: int = 1, theta = radians(0), body_type: int = pymunk.Body.STATIC, mass: float = 1, elasticity: float = 1.0, friction: float = 1.0) -> None:
+    def __init__(self, vertices: list, x: int, y: int, vx: float, vy: float, shape: pymunk.Shape, body: pymunk.Body, scale: int = 1, theta = radians(0), body_type: int = pymunk.Body.STATIC, mass: float = 1, elasticity: float = 1.0, friction: float = 1.0) -> None:
         super().__init__()
         self.vertices: list = vertices
-        if body_type == pymunk.Body.STATIC:
-            self.body: pymunk.Body = pymunk.Body(body_type=body_type)
-        else:
-            self.body: pymunk.Body = pymunk.Body(body_type=body_type, mass=mass, moment=pymunk.moment_for_poly(mass, vertices))
+        self.body: pymunk.Body  = body
         self.body.position: tuple = x, y
         self.body.velocity: tuple = vx, vy
         self.body.angle: float = theta
-        self.shape: pymunk.Shape = pymunk.Poly(self.body, self.vertices)
+        self.shape: pymunk.Shape = shape
         self.shape.elasticity = elasticity
         self.shape.friction = friction
         self.shape.collision_type = 2

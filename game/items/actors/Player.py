@@ -4,11 +4,12 @@ import pymunk
 import pygame
 from pygame.locals import *
 from game.items.Item import Item
+from game.items.ItemRect import ItemRect
 
-class Player(Item):
+class Player(ItemRect):
 
-    def __init__(self, vertices: list, x: int, y: int) -> None:
-        super().__init__(vertices, x, y, 0, 0, body_type=pymunk.Body.DYNAMIC, mass=10, elasticity=0, friction=1)
+    def __init__(self, x: int, y: int, width: int, heigth: int) -> None:
+        super().__init__(x, y, width, heigth, body_type=pymunk.Body.DYNAMIC, mass=10, elasticity=0, friction=1)
         self.density = 0
         self.velocity_x = 300
 
