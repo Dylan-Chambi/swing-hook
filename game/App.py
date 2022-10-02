@@ -1,6 +1,6 @@
 import pygame
-import pymunk.pygame_util
-import pymunk
+# import pymunk.pygame_util
+# import pymunk
 
 from game.scenes.Scene import Scene
 
@@ -17,15 +17,14 @@ class App:
             self.scene.pre_loads()
         self.max_fps: int = max_fps
         self.bg_color: tuple = bg_color
-        self.draw_options: pymunk.pygame_util.DrawOptions = pymunk.pygame_util.DrawOptions(self.screen)
+        # self.draw_options: pymunk.pygame_util.DrawOptions = pymunk.pygame_util.DrawOptions(self.screen)
 
 
     def update(self, keys: list) -> None:
         if self.scene is not None:
             self.screen.fill(self.scene.bg_color)
             self.scene.update(self.screen, keys)
-            self.scene.space.debug_draw(self.draw_options)
-            self.scene.space.step(1/self.max_fps)
+            # self.scene.space.step(1/self.max_fps)
 
         self.clock.tick(self.max_fps)
         pygame.display.set_caption(f"FPS: {self.clock.get_fps():.2f}")

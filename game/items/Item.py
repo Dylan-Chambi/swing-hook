@@ -1,25 +1,28 @@
 from math import radians
 import pygame
-import pymunk.pygame_util
-import pymunk
+# import pymunk.pygame_util
+# import pymunk
 import numpy as np
 
 from pygame.sprite import Sprite
 
 class Item(Sprite):
-    def __init__(self, vertices: list, x: int, y: int, vx: float, vy: float, shape: pymunk.Shape, body: pymunk.Body, scale: int = 1, theta = radians(0), body_type: int = pymunk.Body.STATIC, mass: float = 1, elasticity: float = 1.0, friction: float = 1.0) -> None:
+    def __init__(self, vertices: list, x: int, y: int, vx: float, vy: float, scale: int = 1, theta = radians(0), bg_color: tuple = (0, 100, 255)) -> None:
         super().__init__()
         self.vertices: list = vertices
-        self.body: pymunk.Body  = body
-        self.body.position: tuple = x, y
-        self.body.velocity: tuple = vx, vy
-        self.body.angle: float = theta
-        self.shape: pymunk.Shape = shape
-        self.shape.elasticity = elasticity
-        self.shape.friction = friction
-        self.shape.collision_type = 2
+        # self.body: pymunk.Body  = body
+        # self.body.position: tuple = x, y
+        # self.body.velocity: tuple = vx, vy
+        # self.body.angular_velocity: float = 0
+        # self.body.angle: float = theta
+        self.theta: float = theta
+        # self.shape: pymunk.Shape = shape
+        # self.shape.elasticity = elasticity
+        # self.shape.friction = friction
+        # self.shape.collision_type = 2
         self.item_scale_x: float = scale
         self.item_scale_y: float = scale
+        self.bg_color: tuple = bg_color
 
     def transform(self, t_matrix: list) -> None:
         vert_list = [[v[0], v[1], 1] for v in self.vertices] 
@@ -27,7 +30,7 @@ class Item(Sprite):
         new_matrix = np.transpose(np.dot(t_matrix, vert_matrix))
         new_vertices = [(v[0], v[1]) for v in new_matrix]
         self.vertices = new_vertices
-        self.shape = pymunk.Poly(self.body, self.vertices)
+        # self.shape = pymunk.Poly(self.body, self.vertices)
 
     def rotate(self, angle: float) -> None:
         rotate_matrix = [[np.cos(angle), -np.sin(angle), 0], [np.sin(angle), np.cos(angle), 0], [0, 0, 1]]
@@ -50,4 +53,7 @@ class Item(Sprite):
         self.transform(reflect_matrix)
 
     def update(self, event_keys: list) -> None:
+        pass
+
+    def draw_in_screen(self, screen: pygame.Surface) -> None:
         pass

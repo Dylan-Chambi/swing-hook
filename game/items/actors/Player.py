@@ -1,21 +1,140 @@
 from turtle import Vec2D
 import numpy
-import pymunk
+# import pymunk
 import pygame
+import numpy as np
+from game.constants import DT
 from pygame.locals import *
 from game.items.Item import Item
 from game.items.ItemRect import ItemRect
 
+from utils.utils import collition_query
+
+
 class Player(ItemRect):
 
-    def __init__(self, x: int, y: int, width: int, heigth: int) -> None:
-        super().__init__(x, y, width, heigth, body_type=pymunk.Body.DYNAMIC, mass=10, elasticity=0, friction=1)
+    def __init__(self, x: int, y: int, width: int, heigth: int, bg_color: tuple = (0, 255, 255)) -> None:
+        super().__init__(x, y, width, heigth,bg_color=bg_color)
         self.density = 0
-        self.velocity_x = 300
+        self.velocity_x = 5
+        self.force_y = 0
+        self.is_jumping = False
+        self.dx = 0
+        self.dy = 0
+        self.max_dx = 10
+        self.max_dy = 10
+        self.is_grabbing = False
+        self.can_grab = False
+        self.grabbing_color = (0, 255, 0)
+        self.not_grabbing_color = (255, 0, 0)
+        self.mouse_x = None
+        self.mouse_y = None
 
-    def update(self, event_keys: list) -> None:
+    def update(self, event_keys: list, static_items: list, screen: pygame.Surface) -> None:
+        super().update(event_keys, static_items)
+
+        self.dx = 0
+        self.dy = 0
+
         if event_keys[K_a]:
-            self.body.velocity = Vec2D(-self.velocity_x, self.body.velocity.y)
-        elif event_keys[K_d]:
-            self.body.velocity = Vec2D(self.velocity_x, self.body.velocity.y)
+            self.dx -= (self.velocity_x)
+        if event_keys[K_d]:
+            self.dx += (self.velocity_x)
+        if event_keys[K_SPACE] and not self.is_jumping and not self.is_grabbing:
+            self.is_jumping = True
+            self.force_y = -19
 
+        self.force_y += 1 
+        if self.force_y > 10:
+            self.force_y = 10
+        self.dy += self.force_y
+
+        
+        self.grapple_handler(static_items, screen)
+
+        self.check_collision(static_items)
+
+        if self.dx > self.max_dx:
+            self.dx = self.max_dx
+        if self.dx < -self.max_dx:
+            self.dx = -self.max_dx
+        if self.dy > self.max_dy:
+            self.dy = self.max_dy
+        if self.dy < -self.max_dy:
+            self.dy = -self.max_dy
+
+        self.rect.x += self.dx
+        self.rect.y += self.dy
+
+        if self.rect.bottom > 1080:
+            self.rect.bottom = 1080
+            self.dy = 0
+        if self.rect.top < 0:
+            print("Player is out of screen")
+            self.rect.top = 0
+            self.dy = 0
+
+    def on_event(self, event: pygame.event) -> None:
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1:
+                if self.can_grab:
+                    self.is_grabbing = True
+                    self.is_jumping = True
+        elif event.type == pygame.MOUSEBUTTONUP:
+            if event.button == 1:
+                self.is_grabbing = False
+
+    def check_collision(self, static_items: list) -> None:
+        for item in static_items:
+            if item != self:
+                if item.rect.colliderect(self.rect.x + self.dx, self.rect.y, self.rect.width, self.rect.height):
+                    self.dx = 0
+
+                if item.rect.colliderect(self.rect.x, self.rect.y + self.dy, self.rect.width, self.rect.height):
+                    if self.force_y < 0: # Es una colision por arriba
+                        new_dy = item.rect.bottom - self.rect.top
+                        self.dy = new_dy
+                        self.force_y = 0
+                    if self.force_y >= 0: # Es una colision por abajo
+                        new_dy = item.rect.top - self.rect.bottom
+                        self.dy = new_dy
+                        self.force_y = 0
+                        self.is_jumping = False
+
+    def grapple_handler(self, static_items: list, screen: pygame.Surface) -> None:
+        if not self.is_grabbing:
+            self.mouse_x, self.mouse_y = pygame.mouse.get_pos()
+        player_x, player_y = self.rect.x, self.rect.y
+
+        distance = ((self.mouse_x - player_x) ** 2 + (self.mouse_y - player_y) ** 2) ** 0.5
+        angle = np.arctan2(self.mouse_y - player_y, self.mouse_x - player_x)        
+
+
+        if distance > 500:
+            distance = 500
+            self.mouse_x = player_x + distance * np.cos(angle)
+            self.mouse_y = player_y + distance * np.sin(angle)
+        elif distance < 40:
+            distance = 40
+            self.mouse_x = player_x + distance * np.cos(angle)
+            self.mouse_y = player_y + distance * np.sin(angle)
+
+
+        if collition_query(static_items, (self.mouse_x, self.mouse_y)):
+            self.can_grab = True
+        else:
+            self.can_grab = False
+
+        if self.is_grabbing:
+            distance_grab = ((self.mouse_x - player_x) ** 2 + (self.mouse_y - player_y) ** 2) ** 0.5
+
+            if distance_grab > 30:
+                direction_x = distance * np.cos(angle)
+                direction_y = distance * np.sin(angle)
+                self.dx += (direction_x) * 0.07
+                self.dy += (direction_y) * 0.07 - self.force_y * 0.1
+                
+
+
+        pygame.draw.line(screen, self.grabbing_color if self.can_grab else self.not_grabbing_color, (player_x, player_y), (self.mouse_x, self.mouse_y), 5)
+        pygame.draw.circle(screen, self.grabbing_color if self.can_grab else self.not_grabbing_color, (self.mouse_x, self.mouse_y), 10)
