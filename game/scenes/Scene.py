@@ -43,7 +43,7 @@ class Scene:
 
         if not self.is_grabbing:
             self.mouse_x, self.mouse_y = pygame.mouse.get_pos()
-        player_x, player_y = calculate_center(self.player.vertices, self.player.body.position.x, self.player.body.position.y)
+        player_x, player_y = self.player.body.position
 
         distance = ((self.mouse_x - player_x) ** 2 + (self.mouse_y - player_y) ** 2) ** 0.5
         angle = np.arctan2(self.mouse_y - player_y, self.mouse_x - player_x)
