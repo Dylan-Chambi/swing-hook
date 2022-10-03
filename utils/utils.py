@@ -1,13 +1,15 @@
-import numpy
 import pygame
 import sys
 import os
 from game.items.ItemRect import ItemRect
 
 def calculate_center(vertices: list, x: int, y: int) -> tuple:
-    x = numpy.array(vertices)[:, 0] + x
-    y = numpy.array(vertices)[:, 1] + y
-    return (sum(x) / len(vertices), sum(y) / len(vertices))
+    x_sum = 0
+    y_sum = 0
+    for vertex in vertices:
+        x_sum += vertex[0]
+        y_sum += vertex[1]
+    return (x_sum / len(vertices) + x, y_sum / len(vertices) + y)
 
 def collition_query(static_items: list, point: tuple) -> bool:
     for item in static_items:

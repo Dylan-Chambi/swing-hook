@@ -1,3 +1,4 @@
+import asyncio
 import pygame
 # import pymunk.pygame_util
 # import pymunk
@@ -7,7 +8,7 @@ from game.scenes.Scene import Scene
 class App:
     def __init__(self, screen_width: int, screen_height: int, max_fps: int = 60, init_scene: Scene = None, bg_color: tuple = (39, 185, 245, 0.8)) -> None:
         pygame.init()
-        self.screen: pygame.Surface = pygame.display.set_mode([screen_width, screen_height], pygame.FULLSCREEN)
+        self.screen: pygame.Surface = pygame.display.set_mode([screen_width, screen_height])
         self.width: int = pygame.display.get_surface().get_size()[0]
         self.height: int = pygame.display.get_surface().get_size()[1]
         self.clock: pygame.time.Clock = pygame.time.Clock()
@@ -35,7 +36,7 @@ class App:
         if self.scene is not None:
             self.scene.pre_loads()
 
-    def run(self):
+    async def run(self):
         self.is_running = True
         
         while self.is_running:
@@ -43,4 +44,5 @@ class App:
                 self.scene.on_event(event)
             keys = pygame.key.get_pressed()
             self.update(keys)
+            await asyncio.sleep(0)
         pygame.quit()

@@ -1,8 +1,11 @@
-import sys
-import os
+import asyncio
 from game.GameManager import GameManager
 
 
-if __name__ == "__main__":
+async def main():
     game = GameManager()
-    game.start_game()
+    await game.start_game()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

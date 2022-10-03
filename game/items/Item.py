@@ -2,7 +2,6 @@ from math import radians
 import pygame
 # import pymunk.pygame_util
 # import pymunk
-import numpy as np
 
 from pygame.sprite import Sprite
 
@@ -24,33 +23,33 @@ class Item(Sprite):
         self.item_scale_y: float = scale
         self.bg_color: tuple = bg_color
 
-    def transform(self, t_matrix: list) -> None:
-        vert_list = [[v[0], v[1], 1] for v in self.vertices] 
-        vert_matrix = np.transpose(np.array(vert_list))
-        new_matrix = np.transpose(np.dot(t_matrix, vert_matrix))
-        new_vertices = [(v[0], v[1]) for v in new_matrix]
-        self.vertices = new_vertices
-        # self.shape = pymunk.Poly(self.body, self.vertices)
+    # def transform(self, t_matrix: list) -> None:
+    #     vert_list = [[v[0], v[1], 1] for v in self.vertices] 
+    #     vert_matrix = np.transpose(np.array(vert_list))
+    #     new_matrix = np.transpose(np.dot(t_matrix, vert_matrix))
+    #     new_vertices = [(v[0], v[1]) for v in new_matrix]
+    #     self.vertices = new_vertices
+    #     # self.shape = pymunk.Poly(self.body, self.vertices)
 
-    def rotate(self, angle: float) -> None:
-        rotate_matrix = [[np.cos(angle), -np.sin(angle), 0], [np.sin(angle), np.cos(angle), 0], [0, 0, 1]]
-        # self.theta += angle
-        self.transform(rotate_matrix)    
+    # def rotate(self, angle: float) -> None:
+    #     rotate_matrix = [[np.cos(angle), -np.sin(angle), 0], [np.sin(angle), np.cos(angle), 0], [0, 0, 1]]
+    #     # self.theta += angle
+    #     self.transform(rotate_matrix)    
     
-    def scale(self, scale_x: float, scale_y: float = None) -> None:
-        scale_matrix = [[scale_x, 0, 0], [0, scale_y, 0], [0, 0, 1]]
-        self.item_scale_x *= scale_x
-        self.item_scale_y *= scale_y
-        self.transform(scale_matrix)
+    # def scale(self, scale_x: float, scale_y: float = None) -> None:
+    #     scale_matrix = [[scale_x, 0, 0], [0, scale_y, 0], [0, 0, 1]]
+    #     self.item_scale_x *= scale_x
+    #     self.item_scale_y *= scale_y
+    #     self.transform(scale_matrix)
 
-    def translate(self, x: int, y: int) -> None:
-        translate_matrix = [[1, 0, x], [0, 1, y], [0, 0, 1]]
-        # self.body.position = x, y # TODO: Check if this is correct
-        self.transform(translate_matrix)
+    # def translate(self, x: int, y: int) -> None:
+    #     translate_matrix = [[1, 0, x], [0, 1, y], [0, 0, 1]]
+    #     # self.body.position = x, y # TODO: Check if this is correct
+    #     self.transform(translate_matrix)
     
-    def reflect(self, reflect_y: bool, reflect_x: bool) -> None:
-        reflect_matrix = [[-1 if reflect_x else 1, 0, 0], [0, -1 if reflect_y else 1, 0], [0, 0, 1]]
-        self.transform(reflect_matrix)
+    # def reflect(self, reflect_y: bool, reflect_x: bool) -> None:
+    #     reflect_matrix = [[-1 if reflect_x else 1, 0, 0], [0, -1 if reflect_y else 1, 0], [0, 0, 1]]
+    #     self.transform(reflect_matrix)
 
     def update(self, event_keys: list) -> None:
         pass

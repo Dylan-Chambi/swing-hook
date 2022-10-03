@@ -1,6 +1,4 @@
-from turtle import Vec2D
 import pygame
-import numpy as np
 from game.items.Item import Item
 from game.items.actors.Player import Player
 from utils.utils import calculate_center, collition_query

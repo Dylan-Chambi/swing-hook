@@ -1,8 +1,6 @@
-from turtle import Vec2D
-import numpy
 # import pymunk
+import math
 import pygame
-import numpy as np
 from game.constants import DT, WIN_EVENT
 from pygame.locals import *
 from game.items.Item import Item
@@ -15,8 +13,8 @@ from game.constants import LOSE_EVENT
 
 class Player(ItemRect):
 
-    def __init__(self, x: int, y: int, width: int, heigth: int, bg_color: tuple = (0, 255, 255)) -> None:
-        super().__init__(x, y, width, heigth,bg_color=bg_color)
+    def __init__(self, x: int, y: int, width: int, heigth: int, bg_color: tuple = (0, 255, 255), img: pygame.Surface = None):
+        super().__init__(x, y, width, heigth,bg_color=bg_color, img=img)
         self.density = 0
         self.velocity_x = 5
         self.force_y = 0
@@ -30,9 +28,17 @@ class Player(ItemRect):
         self.mouse_x = None
         self.mouse_y = None
         self.lives = 3
+        self.orientation = "right"
         self.jump_sound = pygame.mixer.Sound(get_assets_path("assets/sounds/jump.mp3"))
         self.grapple_sound = pygame.mixer.Sound(get_assets_path("assets/sounds/grapple.mp3"))
         self.die_sound = pygame.mixer.Sound(get_assets_path("assets/sounds/die.mp3"))
+
+    def draw_in_screen(self) -> None:
+        screen = pygame.display.get_surface()
+        if self.orientation == "right":
+            screen.blit(pygame.transform.flip(self.surf, True, False), (self.rect.x, self.rect.y))
+        elif self.orientation == "left":
+            screen.blit(self.surf, (self.rect.x, self.rect.y))
 
     def update(self, event_keys: list, scene):
         super().update(event_keys, scene)
@@ -42,8 +48,10 @@ class Player(ItemRect):
 
         if event_keys[K_a]:
             self.dx -= (self.velocity_x)
+            self.orientation = "left"
         if event_keys[K_d]:
             self.dx += (self.velocity_x)
+            self.orientation = "right"
         if event_keys[K_SPACE] and not self.is_jumping and not self.is_grabbing:
             self.is_jumping = True
             self.force_y = -18
@@ -91,6 +99,7 @@ class Player(ItemRect):
                 self.lives -= 1
                 if self.lives >= 0:
                     self.die_sound.play()
+                    pass
                 if self.lives < 0:
                     pygame.event.post(pygame.event.Event(LOSE_EVENT))
                 self.rect.x = self.initial_x
@@ -137,17 +146,17 @@ class Player(ItemRect):
         player_x, player_y = self.rect.centerx, self.rect.centery
 
         distance = ((self.mouse_x - player_x) ** 2 + (self.mouse_y - player_y) ** 2) ** 0.5
-        angle = np.arctan2(self.mouse_y - player_y, self.mouse_x - player_x)        
+        angle = math.atan2(self.mouse_y - player_y, self.mouse_x - player_x)       
 
 
         if distance > 400:
             distance = 400
-            self.mouse_x = player_x + distance * np.cos(angle)
-            self.mouse_y = player_y + distance * np.sin(angle)
+            self.mouse_x = player_x + distance * math.cos(angle)
+            self.mouse_y = player_y + distance * math.sin(angle)
         elif distance < 40:
             distance = 40
-            self.mouse_x = player_x + distance * np.cos(angle)
-            self.mouse_y = player_y + distance * np.sin(angle)
+            self.mouse_x = player_x + distance * math.cos(angle)
+            self.mouse_y = player_y + distance * math.sin(angle)
 
 
         if collition_query(grabbable_items, (self.mouse_x, self.mouse_y)):
@@ -159,9 +168,9 @@ class Player(ItemRect):
             distance_grab = ((self.mouse_x - player_x) ** 2 + (self.mouse_y - player_y) ** 2) ** 0.5
 
             if distance_grab > 30:
-                direction_x = self.velocity_x * np.cos(angle)
-                direction_y = self.velocity_x * np.sin(angle)
-                self.dx += (direction_x) + (np.cos(angle) * self.force_y)
+                direction_x = self.velocity_x * math.cos(angle)
+                direction_y = self.velocity_x * math.sin(angle)
+                self.dx += (direction_x) + (math.cos(angle) * self.force_y)
                 self.dy += (direction_y) - self.force_y * 0.8
                 
 

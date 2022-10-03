@@ -1,3 +1,4 @@
+import asyncio
 import pygame
 
 from game.App import App
@@ -13,7 +14,7 @@ from game.scenes.menus.WinScreen import WinScreen
 class GameManager():
     
 
-    def start_game(self):
+    async def start_game(self):
         app = App(SCREEN_WIDTH, SCREEN_HEIGHT, FPS)
 
         splash_scene1 = Splash1(app)
@@ -45,5 +46,5 @@ class GameManager():
 
         main_menu.credits_scene = credits
 
-        app.change_scene(splash_scene1)
-        app.run()
+        app.change_scene(main_menu)
+        await app.run()

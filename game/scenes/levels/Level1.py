@@ -1,4 +1,3 @@
-from turtle import bgcolor
 import pygame
 import sys
 from game.scenes.Scene import Scene
@@ -68,6 +67,7 @@ floor_grass = pygame.image.load(get_assets_path('assets/sprites/floor_grass.png'
 grap_brick = pygame.image.load(get_assets_path('assets/sprites/grap.png'))
 spikes = pygame.image.load(get_assets_path('assets/sprites/spikes.png'))
 goal = pygame.image.load(get_assets_path('assets/sprites/portal_yellow.png'))
+player_sprite = pygame.image.load(get_assets_path('assets/sprites/player.gif'))
 
 # background = pygame.image.load(get_assets_path('assets/level1_back.png'))
 
@@ -90,7 +90,7 @@ class Level1(Scene):
         for i in range(NRO_TILES_Y):
             for j in range(NRO_TILES_X):
                 if TILES_MAP[i][j] == -1:
-                    player = Player(j * TILE_WIDTH + TILE_WIDTH / 2, i * TILE_HEIGHT + TILE_HEIGHT // 2, PLAYER_SIZE, PLAYER_SIZE)
+                    player = Player(j * TILE_WIDTH + TILE_WIDTH / 2, i * TILE_HEIGHT + TILE_HEIGHT // 2, PLAYER_SIZE, PLAYER_SIZE, img = player_sprite)
                     self.add_player(player)
                 elif TILES_MAP[i][j] == -2:
                     self.set_goal(Goal(j * TILE_WIDTH + TILE_WIDTH / 2, i * TILE_HEIGHT + TILE_HEIGHT // 2, TILE_WIDTH, TILE_HEIGHT, img = goal))
