@@ -63,11 +63,11 @@ MIN_TILE_SIZE = min(TILE_HEIGHT, TILE_WIDTH)
 
 PLAYER_SIZE = min(TILE_HEIGHT, TILE_WIDTH) * 0.9
 
-floor = pygame.image.load(get_assets_path('assets/floor.png'))
-floor_grass = pygame.image.load(get_assets_path('assets/floor_grass.png'))
-grap_brick = pygame.image.load(get_assets_path('assets/grap.png'))
-spikes = pygame.image.load(get_assets_path('assets/spikes.png'))
-goal = pygame.image.load(get_assets_path('assets/portal_yellow.png'))
+floor = pygame.image.load(get_assets_path('assets/sprites/floor.png'))
+floor_grass = pygame.image.load(get_assets_path('assets/sprites/floor_grass.png'))
+grap_brick = pygame.image.load(get_assets_path('assets/sprites/grap.png'))
+spikes = pygame.image.load(get_assets_path('assets/sprites/spikes.png'))
+goal = pygame.image.load(get_assets_path('assets/sprites/portal_yellow.png'))
 
 # background = pygame.image.load(get_assets_path('assets/level1_back.png'))
 
