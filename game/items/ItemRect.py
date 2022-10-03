@@ -28,8 +28,12 @@ class ItemRect(Item):
         self.initial_x = self.rect.x
         self.initial_y = self.rect.y
 
-    def update(self, event_keys: list, grabbable_items: list, danger_items: list, static_items: list, screen: pygame.Surface) -> None:
+    def update(self, event_keys: list, scene):
         super().update(event_keys)
 
-    def draw_in_screen(self, screen: pygame.Surface) -> None:
-        pygame.draw.rect(screen, self.bg_color, (self.rect.x, self.rect.y, self.rect.width, self.rect.height))
+    def draw_in_screen(self) -> None:
+        screen = pygame.display.get_surface()
+        if self.img is not None:
+            screen.blit(self.img, self.rect)
+        else:
+            screen.blit(self.surf, self.rect)

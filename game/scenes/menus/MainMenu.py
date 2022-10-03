@@ -32,7 +32,8 @@ class MainMenu(Scene):
     def pre_loads(self) -> None:
         pass
 
-    def update(self, screen: pygame.Surface, pressed_keys: list) -> None:
+    def update(self, pressed_keys: list) -> None:
+        screen = pygame.display.get_surface()
         screen.blit(self.background, (0, 0))
 
         mouse_pos = pygame.mouse.get_pos()

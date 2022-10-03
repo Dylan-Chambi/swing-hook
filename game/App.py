@@ -23,7 +23,7 @@ class App:
     def update(self, keys: list) -> None:
         if self.scene is not None:
             self.screen.fill(self.scene.bg_color)
-            self.scene.update(self.screen, keys)
+            self.scene.update(keys)
             # self.scene.space.step(1/self.max_fps)
 
         self.clock.tick(self.max_fps)

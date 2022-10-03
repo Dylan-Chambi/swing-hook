@@ -1,4 +1,9 @@
+import pygame
+
 SCREEN_WIDTH = 1920
 SCREEN_HEIGHT = 1080
 FPS = 60
 DT = 1/FPS
+
+LOSE_EVENT = pygame.USEREVENT + 1
+WIN_EVENT = pygame.USEREVENT + 2

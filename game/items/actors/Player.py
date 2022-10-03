@@ -3,12 +3,14 @@ import numpy
 # import pymunk
 import pygame
 import numpy as np
-from game.constants import DT
+from game.constants import DT, WIN_EVENT
 from pygame.locals import *
 from game.items.Item import Item
 from game.items.ItemRect import ItemRect
 
 from utils.utils import collition_query
+
+from game.constants import LOSE_EVENT
 
 
 class Player(ItemRect):
@@ -27,9 +29,10 @@ class Player(ItemRect):
         self.not_grabbing_color = (255, 0, 0)
         self.mouse_x = None
         self.mouse_y = None
+        self.lives = 3
 
-    def update(self, event_keys: list, grabbable_items: list, dangerous_items: list, static_items: list, screen: pygame.Surface) -> None:
-        super().update(event_keys, grabbable_items, dangerous_items, static_items, screen)
+    def update(self, event_keys: list, scene):
+        super().update(event_keys, scene)
 
         self.dx = 0
         self.dy = 0
@@ -48,9 +51,9 @@ class Player(ItemRect):
         self.dy += self.force_y
 
         
-        self.grapple_handler(grabbable_items, screen)
+        self.grapple_handler(scene.grabbable_items)
 
-        self.check_collision(grabbable_items, dangerous_items, static_items)
+        self.check_collision(scene.grabbable_items, scene.dangerous_items, scene.static_items, scene.goal)
 
 
 
@@ -77,7 +80,7 @@ class Player(ItemRect):
             if event.button == 1:
                 self.is_grabbing = False
 
-    def check_collision(self, grabbable_items: list, dangerous_items: list, static_items: list) -> None:
+    def check_collision(self, grabbable_items: list, dangerous_items: list, static_items: list, goal: ItemRect) -> None:
         for item in dangerous_items:
             if self.rect.colliderect(item.rect):
                 self.rect.x = self.initial_x
@@ -88,6 +91,9 @@ class Player(ItemRect):
                 self.force_y = 0
                 self.is_grabbing = False
                 self.can_grab = False
+                self.lives -= 1
+                if self.lives < 0:
+                    pygame.event.post(pygame.event.Event(LOSE_EVENT))
             
         new_list = []
 
@@ -112,8 +118,12 @@ class Player(ItemRect):
                         self.is_jumping = False
                     self.force_y = 0
                     self.dy = 0
+        
+        if goal.rect.colliderect(self.rect):
+            pygame.event.post(pygame.event.Event(WIN_EVENT))
 
-    def grapple_handler(self, grabbable_items: list, screen: pygame.Surface) -> None:
+    def grapple_handler(self, grabbable_items: list) -> None:
+        screen = pygame.display.get_surface()
         if not self.is_grabbing:
             self.mouse_x, self.mouse_y = pygame.mouse.get_pos()
         player_x, player_y = self.rect.centerx, self.rect.centery
