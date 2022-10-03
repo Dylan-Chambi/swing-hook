@@ -21,8 +21,6 @@ class Player(ItemRect):
         self.is_jumping = False
         self.dx = 0
         self.dy = 0
-        self.max_dx = 10
-        self.max_dy = 10
         self.is_grabbing = False
         self.can_grab = False
         self.grabbing_color = (0, 255, 0)
@@ -42,13 +40,11 @@ class Player(ItemRect):
             self.dx += (self.velocity_x)
         if event_keys[K_SPACE] and not self.is_jumping and not self.is_grabbing:
             self.is_jumping = True
-            self.force_y = -19
+            self.force_y = -18
 
         self.force_y += 1 
         if self.force_y > 10:
             self.force_y = 10
-        if self.force_y < -10:
-            self.force_y = -10
         self.dy += self.force_y
 
         
@@ -56,14 +52,6 @@ class Player(ItemRect):
 
         self.check_collision(static_items)
 
-        if self.dx > self.max_dx:
-            self.dx = self.max_dx
-        if self.dx < -self.max_dx:
-            self.dx = -self.max_dx
-        if self.dy > self.max_dy:
-            self.dy = self.max_dy
-        if self.dy < -self.max_dy:
-            self.dy = -self.max_dy
 
         self.rect.x += self.dx
         self.rect.y += self.dy
@@ -91,17 +79,14 @@ class Player(ItemRect):
                     self.dx = 0
 
                 if item.rect.colliderect(self.rect.x, self.rect.y + self.dy, self.rect.width, self.rect.height):
-                    if self.force_y < 0: # Es una colision por arriba
-                        new_dy = item.rect.bottom - self.rect.top
-                        self.dy = new_dy
-                        self.force_y = 0
-                    elif self.force_y > 0: # Es una colision por abajo
-                        new_dy = item.rect.top - self.rect.bottom
-                        self.dy = new_dy
-                        self.force_y = 0
+                    if self.force_y > 0:
                         self.is_jumping = False
-                    elif self.force_y == 0: # Es una colision por los lados
-                        self.dy = 0
+                    elif self.force_y < 0:
+                        self.is_jumping = True
+                    else :
+                        self.is_jumping = False
+                    self.force_y = 0
+                    self.dy = 0
 
     def grapple_handler(self, static_items: list, screen: pygame.Surface) -> None:
         if not self.is_grabbing:
