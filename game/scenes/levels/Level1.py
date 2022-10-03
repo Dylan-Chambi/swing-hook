@@ -71,13 +71,15 @@ goal = pygame.image.load(get_assets_path('assets/portal_yellow.png'))
 # background = pygame.image.load(get_assets_path('assets/level1_back.png'))
 
 class Level1(Scene):
-    def __init__(self, app, lose_scene: Scene = None, win_scene: Scene = None):
+    def __init__(self, app, lose_scene: Scene = None, win_scene: Scene = None, menu_scene: Scene = None):
         super().__init__(bg_color=(0, 0, 0))
         self.app = app
         self.lose_scene = lose_scene
         self.win_scene = win_scene
+        self.menu_scene = menu_scene
     
     def pre_loads(self) -> None:
+        pygame.mixer.music.stop()
         self.grabbable_items = pygame.sprite.Group()
         self.dangerous_items = pygame.sprite.Group()
         self.static_items = pygame.sprite.Group()
@@ -99,15 +101,30 @@ class Level1(Scene):
                     self.add_grabbable_item(Grab(j * TILE_WIDTH + TILE_WIDTH / 2, i * TILE_HEIGHT + TILE_HEIGHT // 2, TILE_WIDTH, TILE_HEIGHT, img = grap_brick))
                 elif TILES_MAP[i][j] == 4:
                     self.add_dangerous_item(Spike(j * TILE_WIDTH + TILE_WIDTH / 2, i * TILE_HEIGHT + TILE_HEIGHT // 2, MIN_TILE_SIZE, MIN_TILE_SIZE, img = spikes))
+        pygame.mixer.music.load(get_assets_path('assets/music/play_song.mp3'))
+        pygame.mixer.music.play(-1)
+        pygame.mixer.music.set_volume(0.2)
 
     
     def on_event(self, event: pygame.event) -> None:
         super().on_event(event)
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
-                pygame.quit()
-                sys.exit()
+                self.app.change_scene(self.menu_scene)
         if event.type == LOSE_EVENT:
             self.app.change_scene(self.lose_scene)
         if event.type == WIN_EVENT:
             self.app.change_scene(self.win_scene)
+    
+    def update(self, pressed_keys: list) -> None:
+        super().update(pressed_keys)
+        self.draw_lives()
+        
+
+    def draw_lives(self) -> None:
+        screen = pygame.display.get_surface()
+
+        text = get_font(20).render(f'Lives: {self.players.sprites()[0].lives}', True, (255, 255, 255))
+        text_rect = text.get_rect()
+        text_rect.center = (SCREEN_WIDTH // 2 , 30)
+        screen.blit(text, text_rect)

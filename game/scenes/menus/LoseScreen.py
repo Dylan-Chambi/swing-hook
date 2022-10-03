@@ -15,17 +15,17 @@ class LoseScreen(Scene):
         self.menu_scene = menu_scene
         self.menu_tittle = get_font(100).render("You lose!", True, "#ffffff")
         self.menu_rect = self.menu_tittle.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
-        self.menu_button = Button(image=pygame.image.load("assets/quit_rect.png"), pos=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 200),
+        self.menu_button = Button(image=pygame.image.load("assets/quit_rect.png"), pos=(SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2 + 200),
                             text_input="MENU", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
 
+        self.retry_button = Button(image=pygame.image.load("assets/credits_rect.png"), pos=(SCREEN_WIDTH / 4 * 3, SCREEN_HEIGHT / 2 + 200),
+                            text_input="RETRY", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
 
 
 
-    def go_menu(self):
-        self.app.change_scene(self.menu_scene)
 
-    def retry_level(self):
-        self.app.change_scene(self.retry_scene)
+    def go_to_scene(self, scene: Scene) -> None:
+        self.app.change_scene(scene)
 
 
     def pre_loads(self) -> None:
@@ -41,7 +41,7 @@ class LoseScreen(Scene):
         screen.blit(self.menu_tittle, self.menu_rect)
 
 
-        for button in [self.menu_button]:
+        for button in [self.menu_button, self.retry_button]:
             button.changeColor(mouse_pos)
             button.update(screen)
         
@@ -60,4 +60,6 @@ class LoseScreen(Scene):
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouse_pos = pygame.mouse.get_pos()
             if self.menu_button.checkForInput(mouse_pos):
-                self.go_menu()
+                self.go_to_scene(self.menu_scene)
+            if self.retry_button.checkForInput(mouse_pos):
+                self.go_to_scene(self.retry_scene)

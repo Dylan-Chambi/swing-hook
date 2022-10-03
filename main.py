@@ -26,9 +26,11 @@ if __name__ == "__main__":
 
 
     main_menu = MainMenu(app)
+    level1.menu_scene = main_menu
     main_menu.play_scene = level1
     main_menu.credits_scene = level1
 
+    lose_screen.retry_scene = level1
     lose_screen.menu_scene = main_menu
     win_screen.menu_scene = main_menu
 

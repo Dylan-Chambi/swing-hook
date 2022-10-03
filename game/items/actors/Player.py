@@ -8,7 +8,7 @@ from pygame.locals import *
 from game.items.Item import Item
 from game.items.ItemRect import ItemRect
 
-from utils.utils import collition_query
+from utils.utils import collition_query, get_assets_path
 
 from game.constants import LOSE_EVENT
 
@@ -30,6 +30,8 @@ class Player(ItemRect):
         self.mouse_x = None
         self.mouse_y = None
         self.lives = 3
+        self.jump_sound = pygame.mixer.Sound(get_assets_path("assets/sounds/jump.mp3"))
+        self.grapple_sound = pygame.mixer.Sound(get_assets_path("assets/sounds/grapple.mp3"))
 
     def update(self, event_keys: list, scene):
         super().update(event_keys, scene)
@@ -44,6 +46,7 @@ class Player(ItemRect):
         if event_keys[K_SPACE] and not self.is_jumping and not self.is_grabbing:
             self.is_jumping = True
             self.force_y = -18
+            self.jump_sound.play()
 
         self.force_y += 1 
         if self.force_y > 10:
@@ -76,6 +79,7 @@ class Player(ItemRect):
                 if self.can_grab:
                     self.is_grabbing = True
                     self.is_jumping = True
+                    self.grapple_sound.play()
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
                 self.is_grabbing = False
@@ -83,6 +87,9 @@ class Player(ItemRect):
     def check_collision(self, grabbable_items: list, dangerous_items: list, static_items: list, goal: ItemRect) -> None:
         for item in dangerous_items:
             if self.rect.colliderect(item.rect):
+                self.lives -= 1
+                if self.lives < 0:
+                    pygame.event.post(pygame.event.Event(LOSE_EVENT))
                 self.rect.x = self.initial_x
                 self.rect.y = self.initial_y
                 self.dx = 0
@@ -91,9 +98,6 @@ class Player(ItemRect):
                 self.force_y = 0
                 self.is_grabbing = False
                 self.can_grab = False
-                self.lives -= 1
-                if self.lives < 0:
-                    pygame.event.post(pygame.event.Event(LOSE_EVENT))
             
         new_list = []
 
