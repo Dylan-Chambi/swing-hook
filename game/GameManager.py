@@ -46,5 +46,5 @@ class GameManager():
 
         main_menu.credits_scene = credits
 
-        app.change_scene(main_menu)
+        app.change_scene(splash_scene1)
         await app.run()
