@@ -7,7 +7,7 @@ import numpy as np
 from game.items.Item import Item
 
 class ItemRect(Item):
-    def __init__(self, x: int, y: int, width: int, heigth: int, scale: int = 1, theta = radians(0), bg_color: tuple = (0, 100, 255)) -> None:
+    def __init__(self, x: int, y: int, width: int, heigth: int, scale: int = 1, theta = radians(0), bg_color: tuple = (0, 100, 255), img: pygame.Surface = None) -> None:
         vertices_array = [
             (x + width / 2, y + heigth / 2),
             (x + width / 2, y - heigth / 2),
@@ -16,10 +16,15 @@ class ItemRect(Item):
         ]
         
         super().__init__(vertices_array, x, y, 0, 0, scale, theta, bg_color=bg_color)
-
-        self.surf = pygame.Surface((width, heigth))
-        self.surf.fill(self.bg_color)
-        self.rect = self.surf.get_rect(center=(x, y))
+        if img is not None:
+            self.img = pygame.transform.scale(img, (width, heigth))
+            self.rect = self.img.get_rect(center=(x, y))
+        else:
+            self.img = None
+            self.surf = pygame.Surface((width, heigth))
+            self.surf.fill(self.bg_color)
+            self.rect = self.surf.get_rect(center=(x, y))
+        self.rect.center = (x, y)
         self.initial_x = self.rect.x
         self.initial_y = self.rect.y
 

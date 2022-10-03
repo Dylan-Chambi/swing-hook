@@ -1,3 +1,4 @@
+import pygame
 from game.scenes.Scene import Scene
 
 from game.items.actors.Player import Player
@@ -56,6 +57,8 @@ MIN_TILE_SIZE = min(TILE_HEIGHT, TILE_WIDTH)
 
 PLAYER_SIZE = min(TILE_HEIGHT, TILE_WIDTH) * 0.9
 
+static_brick = pygame.image.load('assets/tile_static.jpg')
+
 class Level1(Scene):
     def __init__(self):
         super().__init__()
@@ -67,7 +70,7 @@ class Level1(Scene):
                     player = Player(j * TILE_WIDTH + TILE_WIDTH // 2, i * TILE_HEIGHT + TILE_HEIGHT // 2, PLAYER_SIZE, PLAYER_SIZE)
                     self.add_player(player)
                 elif TILES_MAP[i][j] == 1:
-                    self.add_static_item(Boundarie(j * TILE_WIDTH + TILE_WIDTH // 2, i * TILE_HEIGHT + TILE_HEIGHT // 2, TILE_WIDTH, TILE_HEIGHT))
+                    self.add_static_item(Boundarie(j * TILE_WIDTH + TILE_WIDTH // 2, i * TILE_HEIGHT + TILE_HEIGHT // 2, TILE_WIDTH, TILE_HEIGHT, img   = static_brick))
                 elif TILES_MAP[i][j] == 2:
                     self.add_grabbable_item(Platform(j * TILE_WIDTH + TILE_WIDTH // 2, i * TILE_HEIGHT + TILE_HEIGHT // 2, TILE_WIDTH, TILE_HEIGHT))
                 elif TILES_MAP[i][j] == 3:
