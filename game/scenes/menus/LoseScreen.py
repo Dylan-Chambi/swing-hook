@@ -4,7 +4,7 @@ from game.App import App
 from game.scenes.Scene import Scene
 from game.scenes.ui.Button import Button
 from game.constants import SCREEN_HEIGHT, SCREEN_WIDTH, FPS
-from utils.utils import get_font
+from utils.utils import get_assets_path, get_font
 
 class LoseScreen(Scene):
     def __init__(self, app: App, retry_scene: Scene = None, menu_scene: Scene = None) -> None:
@@ -29,7 +29,9 @@ class LoseScreen(Scene):
 
 
     def pre_loads(self) -> None:
-        pass
+        pygame.mixer.music.stop()
+        pygame.mixer.music.load(get_assets_path("assets/music/lose.mp3"))
+        pygame.mixer.music.play(1)
 
     def update(self, pressed_keys: list) -> None:
         super().update(pressed_keys)

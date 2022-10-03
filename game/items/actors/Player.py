@@ -32,6 +32,7 @@ class Player(ItemRect):
         self.lives = 3
         self.jump_sound = pygame.mixer.Sound(get_assets_path("assets/sounds/jump.mp3"))
         self.grapple_sound = pygame.mixer.Sound(get_assets_path("assets/sounds/grapple.mp3"))
+        self.die_sound = pygame.mixer.Sound(get_assets_path("assets/sounds/die.mp3"))
 
     def update(self, event_keys: list, scene):
         super().update(event_keys, scene)
@@ -88,6 +89,8 @@ class Player(ItemRect):
         for item in dangerous_items:
             if self.rect.colliderect(item.rect):
                 self.lives -= 1
+                if self.lives >= 0:
+                    self.die_sound.play()
                 if self.lives < 0:
                     pygame.event.post(pygame.event.Event(LOSE_EVENT))
                 self.rect.x = self.initial_x
@@ -118,8 +121,9 @@ class Player(ItemRect):
                         self.is_jumping = False
                     elif self.force_y < 0:
                         self.is_jumping = True
-                    else :
+                    else:
                         self.is_jumping = False
+                    self.jump_sound.stop()
                     self.force_y = 0
                     self.dy = 0
         
