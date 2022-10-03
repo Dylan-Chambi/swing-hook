@@ -29,9 +29,9 @@ class Player(ItemRect):
         self.mouse_y = None
         self.lives = 3
         self.orientation = "right"
-        self.jump_sound = pygame.mixer.Sound(get_assets_path("assets/sounds/jump.mp3"))
-        self.grapple_sound = pygame.mixer.Sound(get_assets_path("assets/sounds/grapple.mp3"))
-        self.die_sound = pygame.mixer.Sound(get_assets_path("assets/sounds/die.mp3"))
+        # self.jump_sound = pygame.mixer.music.load(get_assets_path("assets/sounds/jump.mp3"))
+        # self.grapple_sound = pygame.mixer.music.load(get_assets_path("assets/sounds/grapple.mp3"))
+        # self.die_sound = pygame.mixer.music.load(get_assets_path("assets/sounds/die.mp3"))
 
     def draw_in_screen(self) -> None:
         screen = pygame.display.get_surface()
@@ -55,7 +55,7 @@ class Player(ItemRect):
         if event_keys[K_SPACE] and not self.is_jumping and not self.is_grabbing:
             self.is_jumping = True
             self.force_y = -18
-            self.jump_sound.play()
+            # self.jump_sound.play()
 
         self.force_y += 1 
         if self.force_y > 10:
@@ -88,7 +88,7 @@ class Player(ItemRect):
                 if self.can_grab:
                     self.is_grabbing = True
                     self.is_jumping = True
-                    self.grapple_sound.play()
+                    # self.grapple_sound.play()
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
                 self.is_grabbing = False
@@ -98,7 +98,7 @@ class Player(ItemRect):
             if self.rect.colliderect(item.rect):
                 self.lives -= 1
                 if self.lives >= 0:
-                    self.die_sound.play()
+                    # self.die_sound.play()
                     pass
                 if self.lives < 0:
                     pygame.event.post(pygame.event.Event(LOSE_EVENT))
@@ -132,7 +132,7 @@ class Player(ItemRect):
                         self.is_jumping = True
                     else:
                         self.is_jumping = False
-                    self.jump_sound.stop()
+                    # self.jump_sound.stop()
                     self.force_y = 0
                     self.dy = 0
         
