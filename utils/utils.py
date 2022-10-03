@@ -1,5 +1,5 @@
 import numpy
-
+import pygame
 from game.items.ItemRect import ItemRect
 
 def calculate_center(vertices: list, x: int, y: int) -> tuple:
@@ -12,3 +12,6 @@ def collition_query(static_items: list, point: tuple) -> bool:
         if item.rect.collidepoint(point):
             return True
     return False
+
+def get_font(size):
+    return pygame.font.Font("assets/font.ttf", size)

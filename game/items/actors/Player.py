@@ -27,8 +27,6 @@ class Player(ItemRect):
         self.not_grabbing_color = (255, 0, 0)
         self.mouse_x = None
         self.mouse_y = None
-        self.initial_x = x
-        self.initial_y = y
 
     def update(self, event_keys: list, grabbable_items: list, dangerous_items: list, static_items: list, screen: pygame.Surface) -> None:
         super().update(event_keys, grabbable_items, dangerous_items, static_items, screen)
@@ -64,6 +62,10 @@ class Player(ItemRect):
             self.dy = 0
         if self.rect.top < 0:
             print("Player is out of screen")
+
+        if self.rect.left < 0:
+            self.rect.left = 0
+            self.dx = 0
 
     def on_event(self, event: pygame.event) -> None:
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -120,8 +122,8 @@ class Player(ItemRect):
         angle = np.arctan2(self.mouse_y - player_y, self.mouse_x - player_x)        
 
 
-        if distance > 500:
-            distance = 500
+        if distance > 400:
+            distance = 400
             self.mouse_x = player_x + distance * np.cos(angle)
             self.mouse_y = player_y + distance * np.sin(angle)
         elif distance < 40:

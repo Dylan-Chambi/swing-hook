@@ -20,6 +20,8 @@ class ItemRect(Item):
         self.surf = pygame.Surface((width, heigth))
         self.surf.fill(self.bg_color)
         self.rect = self.surf.get_rect(center=(x, y))
+        self.initial_x = self.rect.x
+        self.initial_y = self.rect.y
 
     def update(self, event_keys: list, grabbable_items: list, danger_items: list, static_items: list, screen: pygame.Surface) -> None:
         super().update(event_keys)

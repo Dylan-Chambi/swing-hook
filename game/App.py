@@ -32,17 +32,14 @@ class App:
 
     def change_scene(self, scene: Scene) -> None:
         self.scene = scene
+        if self.scene is not None:
+            self.scene.pre_loads()
 
     def run(self):
         self.is_running = True
         
         while self.is_running:
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.is_running = False
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        self.is_running = False
                 self.scene.on_event(event)
             keys = pygame.key.get_pressed()
             self.update(keys)
