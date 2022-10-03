@@ -7,32 +7,33 @@ from utils.utils import calculate_center, collition_query
 
 
 class Scene:
-    def __init__(self, player: Player) -> None:
+    def __init__(self) -> None:
         self.item_list: list = []
-        # self.space: pymunk.Space = pymunk.Space()
-        # self.space.gravity = (0, 981)
-        # self.space.add_default_collision_handler()
         self.bg_color: tuple = (39, 185, 245, 0.8)
+        self.grabbable_items = pygame.sprite.Group()
+        self.dangerous_items = pygame.sprite.Group()
         self.static_items = pygame.sprite.Group()
-        self.player = player
-        self.add_item(player)
 
 
     def pre_loads(self) -> None:
         pass
 
-    def add_item(self, item: Item) -> None:
-        # self.space.add(item.body, item.shape)
+    def add_grabbable_item(self, item: Item) -> None:
+        self.item_list.append(item)
+        self.grabbable_items.add(item)
+    
+    def add_dangerous_item(self, item: Item) -> None:
+        self.item_list.append(item)
+        self.dangerous_items.add(item)
+    
+    def add_static_item(self, item: Item) -> None:
         self.item_list.append(item)
         self.static_items.add(item)
 
-    def update(self, screen: pygame.Surface, pressed_keys: list) -> None: 
-        # check collition with static items to jump
-        # if pygame.sprite.spritecollide(self.player, self.static_items, False):
-        #     self.is_jumping = False
+    def update(self, screen: pygame.Surface, pressed_keys: list) -> None:
         for item in self.item_list:
             item.draw_in_screen(screen)
-            item.update(pressed_keys, self.static_items, screen)
+            item.update(pressed_keys, self.grabbable_items, self.dangerous_items, self.static_items, screen)
 
 
 

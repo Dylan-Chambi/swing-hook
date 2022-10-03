@@ -27,9 +27,11 @@ class Player(ItemRect):
         self.not_grabbing_color = (255, 0, 0)
         self.mouse_x = None
         self.mouse_y = None
+        self.initial_x = x
+        self.initial_y = y
 
-    def update(self, event_keys: list, static_items: list, screen: pygame.Surface) -> None:
-        super().update(event_keys, static_items)
+    def update(self, event_keys: list, grabbable_items: list, dangerous_items: list, static_items: list, screen: pygame.Surface) -> None:
+        super().update(event_keys, grabbable_items, dangerous_items, static_items, screen)
 
         self.dx = 0
         self.dy = 0
@@ -48,9 +50,10 @@ class Player(ItemRect):
         self.dy += self.force_y
 
         
-        self.grapple_handler(static_items, screen)
+        self.grapple_handler(grabbable_items, screen)
 
-        self.check_collision(static_items)
+        self.check_collision(grabbable_items, dangerous_items, static_items)
+
 
 
         self.rect.x += self.dx
@@ -72,8 +75,28 @@ class Player(ItemRect):
             if event.button == 1:
                 self.is_grabbing = False
 
-    def check_collision(self, static_items: list) -> None:
+    def check_collision(self, grabbable_items: list, dangerous_items: list, static_items: list) -> None:
+        for item in dangerous_items:
+            if self.rect.colliderect(item.rect):
+                self.rect.x = self.initial_x
+                self.rect.y = self.initial_y
+                self.dx = 0
+                self.dy = 0
+                self.is_jumping = False
+                self.force_y = 0
+                self.is_grabbing = False
+                self.can_grab = False
+            
+        new_list = []
+
         for item in static_items:
+            if item != self:
+                new_list.append(item)
+        for item in grabbable_items:
+            new_list.append(item)
+        
+
+        for item in new_list:
             if item != self:
                 if item.rect.colliderect(self.rect.x + self.dx, self.rect.y, self.rect.width, self.rect.height):
                     self.dx = 0
@@ -88,7 +111,7 @@ class Player(ItemRect):
                     self.force_y = 0
                     self.dy = 0
 
-    def grapple_handler(self, static_items: list, screen: pygame.Surface) -> None:
+    def grapple_handler(self, grabbable_items: list, screen: pygame.Surface) -> None:
         if not self.is_grabbing:
             self.mouse_x, self.mouse_y = pygame.mouse.get_pos()
         player_x, player_y = self.rect.centerx, self.rect.centery
@@ -107,7 +130,7 @@ class Player(ItemRect):
             self.mouse_y = player_y + distance * np.sin(angle)
 
 
-        if collition_query(static_items, (self.mouse_x, self.mouse_y)):
+        if collition_query(grabbable_items, (self.mouse_x, self.mouse_y)):
             self.can_grab = True
         else:
             self.can_grab = False
@@ -116,8 +139,10 @@ class Player(ItemRect):
             distance_grab = ((self.mouse_x - player_x) ** 2 + (self.mouse_y - player_y) ** 2) ** 0.5
 
             if distance_grab > 30:
-                self.dx += np.cos(angle) * self.velocity_x
-                self.dy += np.sin(angle) * self.velocity_x - self.force_y
+                direction_x = self.velocity_x * np.cos(angle)
+                direction_y = self.velocity_x * np.sin(angle)
+                self.dx += (direction_x) + (np.cos(angle) * self.force_y)
+                self.dy += (direction_y) - self.force_y * 0.8
                 
 
 

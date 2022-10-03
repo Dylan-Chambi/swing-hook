@@ -8,24 +8,7 @@ from game.constants import SCREEN_HEIGHT, SCREEN_WIDTH, FPS, DT
 from game.scenes.levels.Level1 import Level1
 
 if __name__ == "__main__":
-    player = Player(500, 500, 50, 50)
-    # scene1 = Scene(player)
-
-    # BOUNDARIES_WIDTH = 50
-    # boundarie = Boundarie(SCREEN_WIDTH / 2, SCREEN_HEIGHT - BOUNDARIES_WIDTH / 2, SCREEN_WIDTH, BOUNDARIES_WIDTH)
-    # boundarie2 = Boundarie(SCREEN_WIDTH / 2, BOUNDARIES_WIDTH / 2, SCREEN_WIDTH, BOUNDARIES_WIDTH)
-    # boundarie3 = Boundarie(BOUNDARIES_WIDTH / 2, SCREEN_HEIGHT / 2, BOUNDARIES_WIDTH, SCREEN_HEIGHT)
-    # boundarie4 = Boundarie(SCREEN_WIDTH - BOUNDARIES_WIDTH / 2, SCREEN_HEIGHT / 2, BOUNDARIES_WIDTH, SCREEN_HEIGHT)
-
-    # scene1.add_item(boundarie)
-    # scene1.add_item(boundarie2)
-    # scene1.add_item(boundarie3)
-    # scene1.add_item(boundarie4)
-
-
-    # # string1 = String(player, (0, 0))
-
-    level1 = Level1(player)
+    level1 = Level1()
 
 
     app = App(SCREEN_WIDTH, SCREEN_HEIGHT, FPS, level1)

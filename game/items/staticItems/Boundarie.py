@@ -10,7 +10,3 @@ class Boundarie(ItemRect):
     def __init__(self, x: int, y: int, width: int, heigth: int, bg_color: tuple = (100, 100, 100)) -> None:
         super().__init__(x, y, width, heigth, bg_color=bg_color)
         # self.shape.collision_type = 1
-
-    def update(self, event_keys: list, static_items: list, screen: pygame.Surface) -> None:
-        # super().update(event_keys, static_items)
-        pass
