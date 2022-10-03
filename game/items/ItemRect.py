@@ -33,7 +33,8 @@ class ItemRect(Item):
 
     def draw_in_screen(self, screen: pygame.Surface) -> None:
         pygame.draw.rect(screen, self.bg_color, (self.rect.x, self.rect.y, self.rect.width, self.rect.height))
-        
+        # pygame.draw.circle(screen, (255, 0, 0), (int(self.rect.left), int(self.rect.top)), 5)
+        # pygame.draw.rect(screen, (0, 0, 0), (self.rect.left, self.rect.top, self.rect.width, self.rect.height), 1)
 
 
     # def transform(self, t_matrix: list) -> None:

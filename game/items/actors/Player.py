@@ -47,6 +47,8 @@ class Player(ItemRect):
         self.force_y += 1 
         if self.force_y > 10:
             self.force_y = 10
+        if self.force_y < -10:
+            self.force_y = -10
         self.dy += self.force_y
 
         
@@ -71,8 +73,6 @@ class Player(ItemRect):
             self.dy = 0
         if self.rect.top < 0:
             print("Player is out of screen")
-            self.rect.top = 0
-            self.dy = 0
 
     def on_event(self, event: pygame.event) -> None:
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -95,16 +95,18 @@ class Player(ItemRect):
                         new_dy = item.rect.bottom - self.rect.top
                         self.dy = new_dy
                         self.force_y = 0
-                    if self.force_y >= 0: # Es una colision por abajo
+                    elif self.force_y > 0: # Es una colision por abajo
                         new_dy = item.rect.top - self.rect.bottom
                         self.dy = new_dy
                         self.force_y = 0
                         self.is_jumping = False
+                    elif self.force_y == 0: # Es una colision por los lados
+                        self.dy = 0
 
     def grapple_handler(self, static_items: list, screen: pygame.Surface) -> None:
         if not self.is_grabbing:
             self.mouse_x, self.mouse_y = pygame.mouse.get_pos()
-        player_x, player_y = self.rect.x, self.rect.y
+        player_x, player_y = self.rect.centerx, self.rect.centery
 
         distance = ((self.mouse_x - player_x) ** 2 + (self.mouse_y - player_y) ** 2) ** 0.5
         angle = np.arctan2(self.mouse_y - player_y, self.mouse_x - player_x)        
@@ -129,10 +131,8 @@ class Player(ItemRect):
             distance_grab = ((self.mouse_x - player_x) ** 2 + (self.mouse_y - player_y) ** 2) ** 0.5
 
             if distance_grab > 30:
-                direction_x = distance * np.cos(angle)
-                direction_y = distance * np.sin(angle)
-                self.dx += (direction_x) * 0.07
-                self.dy += (direction_y) * 0.07 - self.force_y * 0.1
+                self.dx += np.cos(angle) * self.velocity_x
+                self.dy += np.sin(angle) * self.velocity_x - self.force_y
                 
 
 
