@@ -7,3 +7,4 @@ DT = 1/FPS
 
 LOSE_EVENT = pygame.USEREVENT + 1
 WIN_EVENT = pygame.USEREVENT + 2
+GO_NEXT_EVENT = pygame.USEREVENT + 3

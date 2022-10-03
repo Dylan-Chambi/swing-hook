@@ -15,10 +15,10 @@ class LoseScreen(Scene):
         self.menu_scene = menu_scene
         self.menu_tittle = get_font(100).render("You lose!", True, "#ffffff")
         self.menu_rect = self.menu_tittle.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
-        self.menu_button = Button(image=pygame.image.load("assets/quit_rect.png"), pos=(SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2 + 200),
+        self.menu_button = Button(image=pygame.image.load(get_assets_path("assets/quit_rect.png")), pos=(SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2 + 200),
                             text_input="MENU", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
 
-        self.retry_button = Button(image=pygame.image.load("assets/credits_rect.png"), pos=(SCREEN_WIDTH / 4 * 3, SCREEN_HEIGHT / 2 + 200),
+        self.retry_button = Button(image=pygame.image.load(get_assets_path("assets/credits_rect.png")), pos=(SCREEN_WIDTH / 4 * 3, SCREEN_HEIGHT / 2 + 200),
                             text_input="RETRY", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
 
 

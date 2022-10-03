@@ -19,6 +19,9 @@ def get_font(size):
     return pygame.font.Font(get_assets_path("assets/font.ttf"), size)
 
 def get_assets_path(relative_path):
-    # level up from utils folder
-    file_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    return os.path.join(file_path, relative_path)
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)

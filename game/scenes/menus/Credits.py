@@ -4,7 +4,7 @@ from game.App import App
 from game.scenes.Scene import Scene
 from game.scenes.ui.Button import Button
 from game.constants import SCREEN_HEIGHT, SCREEN_WIDTH, FPS
-from utils.utils import get_font
+from utils.utils import get_font, get_assets_path
 
 class Credits(Scene):
     def __init__(self, app: App, back_scene: Scene = None) -> None:
@@ -14,7 +14,7 @@ class Credits(Scene):
         self.back_scene = back_scene
         self.menu_tittle = get_font(100).render("Credits", True, "#ffffff")
         self.menu_rect = self.menu_tittle.get_rect(center=(SCREEN_WIDTH / 2, 130))
-        self.back_button = Button(image=pygame.image.load("assets/quit_rect.png"), pos=(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 200),
+        self.back_button = Button(image=pygame.image.load(get_assets_path("assets/quit_rect.png")), pos=(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 200),
                             text_input="BACK", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
 
         # Column 1

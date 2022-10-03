@@ -15,6 +15,7 @@ from utils.utils import get_font, get_assets_path
 from game.constants import SCREEN_WIDTH, SCREEN_HEIGHT, FPS, DT, LOSE_EVENT, WIN_EVENT
 
 
+
 '''
 Level 1
 -2 = Goal

@@ -7,7 +7,7 @@ from game.scenes.Scene import Scene
 class App:
     def __init__(self, screen_width: int, screen_height: int, max_fps: int = 60, init_scene: Scene = None, bg_color: tuple = (39, 185, 245, 0.8)) -> None:
         pygame.init()
-        self.screen: pygame.Surface = pygame.display.set_mode([screen_width, screen_height])
+        self.screen: pygame.Surface = pygame.display.set_mode([screen_width, screen_height], pygame.FULLSCREEN)
         self.width: int = pygame.display.get_surface().get_size()[0]
         self.height: int = pygame.display.get_surface().get_size()[1]
         self.clock: pygame.time.Clock = pygame.time.Clock()
