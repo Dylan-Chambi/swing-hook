@@ -38,7 +38,7 @@ class MainMenu(Scene):
 
     def pre_loads(self) -> None:
         pygame.mixer.music.stop()
-        pygame.mixer.music.load(get_assets_path("assets/music/menu_song.mp3"))
+        pygame.mixer.music.load(get_assets_path("assets/music/menu_song.ogg"))
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(0.2)
 
