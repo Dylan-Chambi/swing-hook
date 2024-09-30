@@ -6,6 +6,7 @@ from game.scenes.ui.Button import Button
 from game.constants import SCREEN_HEIGHT, SCREEN_WIDTH, FPS
 from utils.utils import get_font, get_assets_path
 
+
 class MainMenu(Scene):
     def __init__(self, app: App, play_scene: Scene = None, credits_scene: Scene = None) -> None:
         super().__init__()
@@ -14,18 +15,20 @@ class MainMenu(Scene):
         self.play_scene = play_scene
         self.credits_scene = credits_scene
         self.menu_tittle = get_font(100).render("Swing Hook", True, "#D3D3D3")
-        self.menu_rect = self.menu_tittle.get_rect(center=(SCREEN_WIDTH / 2, 130))
-        self.background = pygame.transform.scale(pygame.image.load(get_assets_path("assets/sprites/back_blue.jpg")), (SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.menu_rect = self.menu_tittle.get_rect(
+            center=(SCREEN_WIDTH / 2, 130))
+        self.background = pygame.transform.scale(pygame.image.load(get_assets_path(
+            "assets/sprites/back_blue.jpg")), (SCREEN_WIDTH, SCREEN_HEIGHT))
 
-        play_background = pygame.image.load(get_assets_path("assets/sprites/play_rect.png"))
-        play_background = pygame.transform.scale(play_background, (play_background.get_width() + 100, play_background.get_height() + 60))
+        play_background = pygame.image.load(
+            get_assets_path("assets/sprites/play_rect.png"))
+        play_background = pygame.transform.scale(
+            play_background, (play_background.get_width() + 100, play_background.get_height() + 60))
 
         self.play_button = Button(image=play_background, pos=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 80),
-                            text_input="PLAY", font=get_font(100), base_color="#d7fcd4", hovering_color="White")
-        self.credits_button = Button(image=pygame.image.load(get_assets_path("assets/sprites/credits_rect.png")), pos=(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 2 + 150),
-                            text_input="CREDITS", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
-        self.quit_button = Button(image=pygame.image.load(get_assets_path("assets/sprites/credits_rect.png")), pos=(SCREEN_WIDTH / 3 * 2, SCREEN_HEIGHT / 2 + 150),
-                            text_input="QUIT", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
+                                  text_input="PLAY", font=get_font(100), base_color="#d7fcd4", hovering_color="White")
+        self.credits_button = Button(image=pygame.image.load(get_assets_path("assets/sprites/credits_rect.png")), pos=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 150),
+                                     text_input="CREDITS", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
 
     def play(self):
         self.app.change_scene(self.play_scene)
@@ -45,13 +48,11 @@ class MainMenu(Scene):
 
         mouse_pos = pygame.mouse.get_pos()
 
-
         screen.blit(self.menu_tittle, self.menu_rect)
 
-        for button in [self.play_button, self.credits_button, self.quit_button]:
+        for button in [self.play_button, self.credits_button]:
             button.changeColor(mouse_pos)
             button.update(screen)
-        
 
     def on_event(self, event: pygame.event) -> None:
         super().on_event(event)
@@ -70,7 +71,3 @@ class MainMenu(Scene):
                 self.play()
             if self.credits_button.checkForInput(mouse_pos):
                 self.credits()
-            if self.quit_button.checkForInput(mouse_pos):
-                self.app.is_running = False
-                pygame.quit()
-                sys.exit()
