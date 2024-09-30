@@ -29,11 +29,11 @@ class Player(ItemRect):
         self.mouse_y = None
         self.lives = 3
         self.orientation = "right"
-        self.jump_sound = pygame.mixer.music.load(
+        self.jump_sound = pygame.mixer.Sound(
             get_assets_path("assets/sounds/jump.ogg"))
-        self.grapple_sound = pygame.mixer.music.load(
+        self.grapple_sound = pygame.mixer.Sound(
             get_assets_path("assets/sounds/grapple.ogg"))
-        self.die_sound = pygame.mixer.music.load(
+        self.die_sound = pygame.mixer.Sound(
             get_assets_path("assets/sounds/die.ogg"))
 
     def draw_in_screen(self) -> None:
